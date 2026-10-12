@@ -1,0 +1,182 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Which Markets Matter Most for Each Commodity?",
+    "subtitle": [
+      "Leading destinations for five major Australian exports, 2023 (AUD billions)",
+      "Darker cells represent higher export values; blank cells were not among a commodity's top five markets"
+    ],
+    "anchor": "start",
+    "fontSize": 22,
+    "subtitleFontSize": 13,
+    "subtitleColor": "#666666",
+    "offset": 15
+  },
+  "data": {
+    "url": "data/chart_07_market_heatmap.csv"
+  },
+  "width": {
+    "step": 76
+  },
+  "height": {
+    "step": 58
+  },
+  "config": {
+    "background": "#ffffff",
+    "font": "'Source Sans 3', Arial, sans-serif",
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelFontSize": 12,
+      "titleFontSize": 13,
+      "grid": false,
+      "domain": false,
+      "ticks": false,
+      "titleFontWeight": 600
+    },
+    "title": {
+      "font": "Archivo, Arial, sans-serif",
+      "subtitleFont": "'Source Sans 3', Arial, sans-serif",
+      "color": "#153f34"
+    }
+  },
+  "encoding": {
+    "x": {
+      "field": "Destination",
+      "type": "nominal",
+      "title": "Export market",
+      "sort": [
+        "China",
+        "Japan",
+        "South Korea",
+        "Taiwan",
+        "India",
+        "Hong Kong",
+        "Singapore",
+        "United Kingdom",
+        "United States"
+      ],
+      "axis": {
+        "labelAngle": -35,
+        "labelAlign": "right",
+        "labelLimit": 120
+      }
+    },
+    "y": {
+      "field": "Commodity",
+      "type": "nominal",
+      "title": null,
+      "sort": [
+        "Iron ore",
+        "LNG",
+        "Metallurgical coal",
+        "Thermal coal",
+        "Gold"
+      ],
+      "axis": {
+        "labelLimit": 160
+      }
+    }
+  },
+  "layer": [
+    {
+      "params": [
+        {
+          "name": "cellHover",
+          "select": {
+            "type": "point",
+            "fields": [
+              "Commodity",
+              "Destination"
+            ],
+            "on": "pointerover",
+            "clear": "pointerout"
+          }
+        }
+      ],
+      "mark": {
+        "type": "rect",
+        "cornerRadius": 3,
+        "stroke": "#ffffff",
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "color": {
+          "field": "Export_Value_AUD_Million",
+          "type": "quantitative",
+          "title": "Export value (AUD billions)",
+          "scale": {
+            "type": "log",
+            "scheme": "oranges"
+          },
+          "legend": {
+            "orient": "bottom",
+            "direction": "horizontal",
+            "gradientLength": 300,
+            "labelExpr": "format(datum.value / 1000, ',.0f') + 'b'"
+          }
+        },
+        "opacity": {
+          "condition": {
+            "param": "cellHover",
+            "value": 1
+          },
+          "value": 0.82
+        },
+        "tooltip": [
+          {
+            "field": "Commodity",
+            "type": "nominal",
+            "title": "Commodity"
+          },
+          {
+            "field": "Destination",
+            "type": "nominal",
+            "title": "Export market"
+          },
+          {
+            "field": "Export_Value_AUD_Million",
+            "type": "quantitative",
+            "title": "Export value (AUD million)",
+            "format": ",.0f"
+          },
+          {
+            "field": "Year",
+            "type": "ordinal",
+            "title": "Year"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "fontWeight": "bold"
+      },
+      "transform": [
+        {
+          "calculate": "datum.Export_Value_AUD_Million / 1000",
+          "as": "Billions"
+        },
+        {
+          "calculate": "datum.Billions >= 10 ? format(datum.Billions, '.0f') + 'b' : format(datum.Billions, '.1f') + 'b'",
+          "as": "Cell_Label"
+        }
+      ],
+      "encoding": {
+        "text": {
+          "field": "Cell_Label"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.Export_Value_AUD_Million > 15000",
+            "value": "#ffffff"
+          },
+          "value": "#333333"
+        }
+      }
+    }
+  ]
+}

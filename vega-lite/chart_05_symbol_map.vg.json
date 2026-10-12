@@ -1,0 +1,261 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Proportional-symbol map of major destination markets for five Australian export commodities in 2023.",
+  "width": 500,
+  "height": 300,
+  "background": "#ffffff",
+  "title": {
+    "text": "Which Markets Bought the Most?",
+    "subtitle": [
+      "Combined export value of iron ore, LNG, gold, metallurgical coal and thermal coal, 2023",
+      "Circle area represents export value"
+    ],
+    "anchor": "start",
+    "fontSize": 18,
+    "subtitleFontSize": 12,
+    "subtitleColor": "#666666",
+    "offset": 15
+  },
+  "projection": {
+    "type": "equalEarth"
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
+        "format": {
+          "type": "topojson",
+          "feature": "countries"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#f2eee5",
+        "stroke": "#b8b1a6",
+        "strokeWidth": 0.6
+      }
+    },
+    {
+      "data": {
+        "url": "data/chart_04_export_flows.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "Destination_Longitude": "number",
+            "Destination_Latitude": "number",
+            "Export_Value_AUD_Million": "number",
+            "Rank": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "calculate": "datum.Export_Value_AUD_Million / 1000",
+          "as": "Export_Value_AUD_Billion"
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "color": "#d46a32",
+        "opacity": 0.75,
+        "stroke": "#853521",
+        "strokeWidth": 1.2
+      },
+      "encoding": {
+        "longitude": {
+          "field": "Destination_Longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "Destination_Latitude",
+          "type": "quantitative"
+        },
+        "size": {
+          "field": "Export_Value_AUD_Billion",
+          "type": "quantitative",
+          "scale": {
+            "range": [
+              30,
+              1500
+            ]
+          },
+          "legend": {
+            "title": "Export value (AUD billions)",
+            "orient": "bottom",
+            "direction": "horizontal",
+            "values": [
+              10,
+              50,
+              100,
+              150
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "Destination",
+            "type": "nominal",
+            "title": "Destination"
+          },
+          {
+            "field": "Export_Value_AUD_Billion",
+            "type": "quantitative",
+            "title": "Export value (AUD billions)",
+            "format": ".1f"
+          },
+          {
+            "field": "Rank",
+            "type": "quantitative",
+            "title": "Market rank",
+            "format": ".0f"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "data/chart_04_export_flows.csv"
+      },
+      "transform": [
+        {
+          "calculate": "{'China':98,'Japan':141.5,'South Korea':124,'Taiwan':123.5,'Hong Kong':114.2,'India':73,'Singapore':100,'United Kingdom':-3.4,'United States':-95.7}[datum.Destination]",
+          "as": "Label_Lon"
+        },
+        {
+          "calculate": "{'China':36,'Japan':36.5,'South Korea':47,'Taiwan':23.7,'Hong Kong':12.5,'India':22,'Singapore':1.4,'United Kingdom':61,'United States':43}[datum.Destination]",
+          "as": "Label_Lat"
+        },
+        {
+          "calculate": "{'China':'right','Japan':'left','South Korea':'center','Taiwan':'left','Hong Kong':'center','India':'right','Singapore':'right','United Kingdom':'center','United States':'center'}[datum.Destination]",
+          "as": "Label_Align"
+        },
+        {
+          "filter": "datum.Label_Align === 'left'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "fontSize": 9,
+        "fontWeight": "bold",
+        "color": "#333333"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "Label_Lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "Label_Lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "Destination"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/chart_04_export_flows.csv"
+      },
+      "transform": [
+        {
+          "calculate": "{'China':98,'Japan':141.5,'South Korea':124,'Taiwan':123.5,'Hong Kong':114.2,'India':73,'Singapore':100,'United Kingdom':-3.4,'United States':-95.7}[datum.Destination]",
+          "as": "Label_Lon"
+        },
+        {
+          "calculate": "{'China':36,'Japan':36.5,'South Korea':47,'Taiwan':23.7,'Hong Kong':12.5,'India':22,'Singapore':1.4,'United Kingdom':61,'United States':43}[datum.Destination]",
+          "as": "Label_Lat"
+        },
+        {
+          "calculate": "{'China':'right','Japan':'left','South Korea':'center','Taiwan':'left','Hong Kong':'center','India':'right','Singapore':'right','United Kingdom':'center','United States':'center'}[datum.Destination]",
+          "as": "Label_Align"
+        },
+        {
+          "filter": "datum.Label_Align === 'right'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "middle",
+        "fontSize": 9,
+        "fontWeight": "bold",
+        "color": "#333333"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "Label_Lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "Label_Lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "Destination"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/chart_04_export_flows.csv"
+      },
+      "transform": [
+        {
+          "calculate": "{'China':98,'Japan':141.5,'South Korea':124,'Taiwan':123.5,'Hong Kong':114.2,'India':73,'Singapore':100,'United Kingdom':-3.4,'United States':-95.7}[datum.Destination]",
+          "as": "Label_Lon"
+        },
+        {
+          "calculate": "{'China':36,'Japan':36.5,'South Korea':47,'Taiwan':23.7,'Hong Kong':12.5,'India':22,'Singapore':1.4,'United Kingdom':61,'United States':43}[datum.Destination]",
+          "as": "Label_Lat"
+        },
+        {
+          "calculate": "{'China':'right','Japan':'left','South Korea':'center','Taiwan':'left','Hong Kong':'center','India':'right','Singapore':'right','United Kingdom':'center','United States':'center'}[datum.Destination]",
+          "as": "Label_Align"
+        },
+        {
+          "filter": "datum.Label_Align === 'center'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "baseline": "middle",
+        "fontSize": 9,
+        "fontWeight": "bold",
+        "color": "#333333"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "Label_Lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "Label_Lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "Destination"
+        }
+      }
+    }
+  ],
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "'Source Sans 3', Arial, sans-serif",
+    "title": {
+      "font": "Archivo, Arial, sans-serif",
+      "subtitleFont": "'Source Sans 3', Arial, sans-serif",
+      "color": "#153f34"
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 13,
+      "titleFontWeight": 600
+    }
+  }
+}

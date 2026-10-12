@@ -1,0 +1,237 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Changes in the composition of Australian resources and energy exports from 2004–05 to 2024–25.",
+  "width": 800,
+  "height": 430,
+  "background": "#ffffff",
+  "data": {
+    "url": "data/chart_02_export_mix.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "Export_Value_AUD_Million": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "calculate": "datum.Export_Value_AUD_Million / 1000",
+      "as": "Export_Value_AUD_Billion"
+    },
+    {
+      "calculate": "indexof([\"Iron ore\", \"LNG\", \"Gold\", \"Metallurgical coal\", \"Thermal coal\", \"Other resources and energy\"], datum.Category)",
+      "as": "Stack_Order"
+    }
+  ],
+  "title": {
+    "text": "How Has Australia’s Export Mix Changed?",
+    "subtitle": [
+      "Value of major resources and energy exports, 2004–05 to 2024–25",
+      "Click a category in the legend or on the chart to highlight it; double-click to reset"
+    ],
+    "anchor": "start",
+    "fontSize": 22,
+    "subtitleFontSize": 13,
+    "subtitleColor": "#666666"
+  },
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "'Source Sans 3', Arial, sans-serif",
+    "title": {
+      "font": "Archivo, Arial, sans-serif",
+      "subtitleFont": "'Source Sans 3', Arial, sans-serif",
+      "color": "#153f34"
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 13,
+      "titleFontWeight": 600
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "area",
+        "interpolate": "monotone",
+        "stroke": "#ffffff",
+        "strokeWidth": 0.7
+      },
+      "encoding": {
+        "y": {
+          "aggregate": "sum",
+          "field": "Export_Value_AUD_Billion",
+          "type": "quantitative",
+          "stack": "zero",
+          "axis": {
+            "title": "Export value (AUD billions)",
+            "labelFontSize": 11,
+            "titleFontSize": 13,
+            "grid": true,
+            "gridColor": "#e6e6e6"
+          }
+        },
+        "color": {
+          "field": "Category",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Iron ore",
+              "LNG",
+              "Gold",
+              "Metallurgical coal",
+              "Thermal coal",
+              "Other resources and energy"
+            ],
+            "range": [
+              "#9f3b2c",
+              "#d88932",
+              "#e3b341",
+              "#9b6847",
+              "#6f4e37",
+              "#c8c1b5"
+            ]
+          },
+          "legend": {
+            "title": "Export category",
+            "orient": "bottom",
+            "columns": 3,
+            "labelFontSize": 11,
+            "titleFontSize": 12
+          }
+        },
+        "opacity": {
+          "condition": {
+            "param": "categoryPick",
+            "value": 1
+          },
+          "value": 0.25
+        },
+        "order": {
+          "field": "Stack_Order",
+          "type": "quantitative",
+          "sort": "ascending"
+        },
+        "tooltip": [
+          {
+            "field": "Financial_Year",
+            "type": "nominal",
+            "title": "Financial year"
+          },
+          {
+            "field": "Category",
+            "type": "nominal",
+            "title": "Category"
+          },
+          {
+            "field": "Export_Value_AUD_Billion",
+            "type": "quantitative",
+            "title": "Export value (AUD billions)",
+            "format": ".1f"
+          }
+        ]
+      },
+      "params": [
+        {
+          "name": "categoryPick",
+          "select": {
+            "type": "point",
+            "fields": [
+              "Category"
+            ]
+          },
+          "bind": "legend"
+        }
+      ]
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "Financial_Year": "2022–23",
+            "y": 466.2,
+            "text": [
+              "Peak in 2022–23: A$466 billion,",
+              "as coal and LNG values surged"
+            ]
+          }
+        ]
+      },
+      "mark": {
+        "fontSize": 12,
+        "fontStyle": "italic",
+        "color": "#555555",
+        "type": "text",
+        "align": "right",
+        "dx": -10,
+        "dy": -18,
+        "lineHeight": 15
+      },
+      "encoding": {
+        "x": {
+          "field": "Financial_Year",
+          "type": "ordinal"
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "text"
+        }
+      },
+      "transform": []
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "Financial_Year": "2004–05",
+            "y": 66.6,
+            "text": [
+              "2004–05: A$67 billion"
+            ]
+          }
+        ]
+      },
+      "mark": {
+        "fontSize": 12,
+        "fontStyle": "italic",
+        "color": "#555555",
+        "type": "text",
+        "align": "left",
+        "dx": 4,
+        "dy": -26,
+        "lineHeight": 15
+      },
+      "encoding": {
+        "x": {
+          "field": "Financial_Year",
+          "type": "ordinal"
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "text"
+        }
+      },
+      "transform": []
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "Financial_Year",
+      "type": "ordinal",
+      "sort": "ascending",
+      "axis": {
+        "title": "Financial year",
+        "labelAngle": -45,
+        "labelFontSize": 10,
+        "titleFontSize": 13
+      }
+    }
+  }
+}

@@ -1,0 +1,227 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "How Have Australia’s Major Commodity Exports Changed?",
+    "subtitle": [
+      "Annual export value by commodity, 2004–05 to 2024–25",
+      "Each panel uses its own vertical scale to make the trend easier to see"
+    ],
+    "anchor": "start",
+    "fontSize": 22,
+    "subtitleFontSize": 13,
+    "subtitleColor": "#666666",
+    "offset": 15
+  },
+  "data": {
+    "url": "data/chart_02_export_mix.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "Export_Value_AUD_Million": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "filter": "indexof(datum.Category, 'Other resources and energy') == -1"
+    },
+    {
+      "calculate": "toNumber(slice(datum.Financial_Year, 0, 4))",
+      "as": "Year_Start"
+    }
+  ],
+  "facet": {
+    "field": "Category",
+    "type": "nominal",
+    "title": null,
+    "sort": [
+      "Iron ore",
+      "LNG",
+      "Gold",
+      "Metallurgical coal",
+      "Thermal coal"
+    ],
+    "header": {
+      "labelFontSize": 15,
+      "labelFontWeight": "bold",
+      "labelColor": "#333333",
+      "labelPadding": 8,
+      "labelOrient": "top",
+      "labelAnchor": "start"
+    }
+  },
+  "columns": 1,
+  "spec": {
+    "width": 820,
+    "height": 110,
+    "layer": [
+      {
+        "mark": {
+          "type": "line",
+          "color": "#d96b27",
+          "strokeWidth": 2.5
+        },
+        "encoding": {
+          "x": {
+            "field": "Year_Start",
+            "type": "quantitative",
+            "title": null,
+            "scale": {
+              "domain": [
+                2004,
+                2024
+              ]
+            },
+            "axis": {
+              "format": "d",
+              "tickCount": 6,
+              "grid": false,
+              "labelFontSize": 10
+            }
+          },
+          "y": {
+            "field": "Export_Value_AUD_Million",
+            "type": "quantitative",
+            "title": "AUD million",
+            "scale": {
+              "zero": true
+            },
+            "axis": {
+              "format": "~s",
+              "tickCount": 4,
+              "grid": true
+            }
+          }
+        }
+      },
+      {
+        "mark": {
+          "type": "point",
+          "filled": true,
+          "color": "#d96b27",
+          "size": 40,
+          "opacity": 0.8
+        },
+        "encoding": {
+          "x": {
+            "field": "Year_Start",
+            "type": "quantitative",
+            "scale": {
+              "domain": [
+                2004,
+                2024
+              ]
+            }
+          },
+          "y": {
+            "field": "Export_Value_AUD_Million",
+            "type": "quantitative",
+            "scale": {
+              "zero": true
+            }
+          },
+          "tooltip": [
+            {
+              "field": "Category",
+              "type": "nominal",
+              "title": "Commodity"
+            },
+            {
+              "field": "Financial_Year",
+              "type": "ordinal",
+              "title": "Financial year"
+            },
+            {
+              "field": "Export_Value_AUD_Million",
+              "type": "quantitative",
+              "title": "Export value (AUD million)",
+              "format": ",.0f"
+            }
+          ]
+        }
+      },
+      {
+        "transform": [
+          {
+            "joinaggregate": [
+              {
+                "op": "max",
+                "field": "Export_Value_AUD_Million",
+                "as": "Peak"
+              }
+            ],
+            "groupby": [
+              "Category"
+            ]
+          },
+          {
+            "filter": "datum.Export_Value_AUD_Million === datum.Peak"
+          },
+          {
+            "calculate": "'Peak: A$' + format(datum.Peak / 1000, '.1f') + 'b (' + datum.Financial_Year + ')'",
+            "as": "Peak_Label"
+          }
+        ],
+        "mark": {
+          "type": "text",
+          "align": "right",
+          "dx": -8,
+          "dy": 2,
+          "fontSize": 11,
+          "fontWeight": "bold",
+          "color": "#984126"
+        },
+        "encoding": {
+          "x": {
+            "field": "Year_Start",
+            "type": "quantitative",
+            "scale": {
+              "domain": [
+                2004,
+                2024
+              ]
+            }
+          },
+          "y": {
+            "field": "Export_Value_AUD_Million",
+            "type": "quantitative",
+            "scale": {
+              "zero": true
+            }
+          },
+          "text": {
+            "field": "Peak_Label"
+          }
+        }
+      }
+    ]
+  },
+  "resolve": {
+    "scale": {
+      "y": "independent"
+    }
+  },
+  "config": {
+    "background": "#ffffff",
+    "font": "'Source Sans 3', Arial, sans-serif",
+    "view": {
+      "stroke": "#dddddd",
+      "strokeWidth": 1
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "gridColor": "#eeeeee",
+      "domainColor": "#bbbbbb",
+      "titleFontWeight": 600
+    },
+    "facet": {
+      "spacing": 18
+    },
+    "title": {
+      "font": "Archivo, Arial, sans-serif",
+      "subtitleFont": "'Source Sans 3', Arial, sans-serif",
+      "color": "#153f34"
+    }
+  }
+}

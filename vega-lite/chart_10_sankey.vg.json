@@ -1,0 +1,404 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Where Do Australia’s Major Commodities Go?",
+    "subtitle": [
+      "Connections between five commodities and their leading export markets, 2023",
+      "Thicker lines represent higher export values",
+      "Click a link or a commodity in the legend to follow its flows; double-click to reset"
+    ],
+    "anchor": "start",
+    "fontSize": 22,
+    "subtitleFontSize": 13,
+    "subtitleColor": "#666666",
+    "offset": 15
+  },
+  "data": {
+    "url": "data/chart_07_market_heatmap.csv"
+  },
+  "transform": [
+    {
+      "calculate": "0.15",
+      "as": "SourceX"
+    },
+    {
+      "calculate": "0.80",
+      "as": "TargetX"
+    },
+    {
+      "calculate": "datum.Commodity === 'Iron ore' ? 1 : datum.Commodity === 'LNG' ? 3 : datum.Commodity === 'Gold' ? 5 : datum.Commodity === 'Metallurgical coal' ? 7 : 9",
+      "as": "SourceY"
+    },
+    {
+      "calculate": "datum.Destination === 'China' ? 0.7 : datum.Destination === 'Japan' ? 1.75 : datum.Destination === 'South Korea' ? 2.8 : datum.Destination === 'Taiwan' ? 3.85 : datum.Destination === 'India' ? 4.9 : datum.Destination === 'Hong Kong' ? 5.95 : datum.Destination === 'Singapore' ? 7 : datum.Destination === 'United Kingdom' ? 8.05 : 9.1",
+      "as": "TargetY"
+    }
+  ],
+  "width": 900,
+  "height": 560,
+  "layer": [
+    {
+      "mark": {
+        "type": "rule"
+      },
+      "encoding": {
+        "x": {
+          "field": "SourceX",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1
+            ]
+          },
+          "axis": null
+        },
+        "x2": {
+          "field": "TargetX"
+        },
+        "y": {
+          "field": "SourceY",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              10,
+              0
+            ]
+          },
+          "axis": null
+        },
+        "y2": {
+          "field": "TargetY"
+        },
+        "color": {
+          "field": "Commodity",
+          "type": "nominal",
+          "title": "Commodity",
+          "scale": {
+            "domain": [
+              "Iron ore",
+              "LNG",
+              "Gold",
+              "Metallurgical coal",
+              "Thermal coal"
+            ],
+            "range": [
+              "#c4552d",
+              "#e89536",
+              "#d4a72c",
+              "#594b8a",
+              "#2f6b58"
+            ]
+          }
+        },
+        "strokeWidth": {
+          "field": "Export_Value_AUD_Million",
+          "type": "quantitative",
+          "title": "Export value (AUD million)",
+          "scale": {
+            "type": "sqrt",
+            "range": [
+              2,
+              28
+            ]
+          },
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "Commodity",
+            "type": "nominal",
+            "title": "Commodity"
+          },
+          {
+            "field": "Destination",
+            "type": "nominal",
+            "title": "Export market"
+          },
+          {
+            "field": "Export_Value_AUD_Million",
+            "type": "quantitative",
+            "title": "Export value (AUD million)",
+            "format": ",.0f"
+          }
+        ],
+        "opacity": {
+          "condition": {
+            "param": "commodityPick",
+            "value": 0.6
+          },
+          "value": 0.08
+        }
+      },
+      "params": [
+        {
+          "name": "commodityPick",
+          "select": {
+            "type": "point",
+            "fields": [
+              "Commodity"
+            ]
+          },
+          "bind": "legend"
+        }
+      ]
+    },
+    {
+      "transform": [
+        {
+          "aggregate": [
+            {
+              "op": "max",
+              "field": "Export_Value_AUD_Million",
+              "as": "NodeValue"
+            }
+          ],
+          "groupby": [
+            "Commodity",
+            "SourceX",
+            "SourceY"
+          ]
+        }
+      ],
+      "mark": {
+        "type": "square",
+        "size": 800,
+        "stroke": "white",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "SourceX",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1
+            ]
+          },
+          "axis": null
+        },
+        "y": {
+          "field": "SourceY",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              10,
+              0
+            ]
+          },
+          "axis": null
+        },
+        "color": {
+          "field": "Commodity",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Iron ore",
+              "LNG",
+              "Gold",
+              "Metallurgical coal",
+              "Thermal coal"
+            ],
+            "range": [
+              "#c4552d",
+              "#e89536",
+              "#d4a72c",
+              "#594b8a",
+              "#2f6b58"
+            ]
+          },
+          "legend": null
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "aggregate": [
+            {
+              "op": "sum",
+              "field": "Export_Value_AUD_Million",
+              "as": "MarketTotal"
+            }
+          ],
+          "groupby": [
+            "Destination",
+            "TargetX",
+            "TargetY"
+          ]
+        }
+      ],
+      "mark": {
+        "type": "square",
+        "size": 650,
+        "color": "#555555",
+        "stroke": "white",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "TargetX",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1
+            ]
+          },
+          "axis": null
+        },
+        "y": {
+          "field": "TargetY",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              10,
+              0
+            ]
+          },
+          "axis": null
+        },
+        "tooltip": [
+          {
+            "field": "Destination",
+            "type": "nominal",
+            "title": "Export market"
+          },
+          {
+            "field": "MarketTotal",
+            "type": "quantitative",
+            "title": "Combined value",
+            "format": ",.0f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "aggregate": [
+            {
+              "op": "max",
+              "field": "Export_Value_AUD_Million",
+              "as": "NodeValue"
+            }
+          ],
+          "groupby": [
+            "Commodity",
+            "SourceX",
+            "SourceY"
+          ]
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "middle",
+        "dx": -22,
+        "fontSize": 13,
+        "fontWeight": "bold",
+        "color": "#333333"
+      },
+      "encoding": {
+        "x": {
+          "field": "SourceX",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1
+            ]
+          }
+        },
+        "y": {
+          "field": "SourceY",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              10,
+              0
+            ]
+          }
+        },
+        "text": {
+          "field": "Commodity"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "aggregate": [
+            {
+              "op": "sum",
+              "field": "Export_Value_AUD_Million",
+              "as": "MarketTotal"
+            }
+          ],
+          "groupby": [
+            "Destination",
+            "TargetX",
+            "TargetY"
+          ]
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 22,
+        "fontSize": 13,
+        "color": "#333333"
+      },
+      "encoding": {
+        "x": {
+          "field": "TargetX",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1
+            ]
+          }
+        },
+        "y": {
+          "field": "TargetY",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              10,
+              0
+            ]
+          }
+        },
+        "text": {
+          "field": "Destination"
+        }
+      }
+    }
+  ],
+  "config": {
+    "background": "#ffffff",
+    "font": "'Source Sans 3', Arial, sans-serif",
+    "view": {
+      "stroke": null
+    },
+    "legend": {
+      "orient": "bottom",
+      "direction": "horizontal",
+      "labelFontSize": 12,
+      "titleFontSize": 12
+    },
+    "title": {
+      "font": "Archivo, Arial, sans-serif",
+      "subtitleFont": "'Source Sans 3', Arial, sans-serif",
+      "color": "#153f34"
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 13,
+      "titleFontWeight": 600
+    }
+  }
+}

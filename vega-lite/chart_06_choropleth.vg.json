@@ -1,0 +1,121 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Which Countries Are Australia’s Largest Export Markets?",
+    "subtitle": [
+      "Combined value of five major Australian export commodities, 2023",
+      "Darker orange represents a larger export value"
+    ],
+    "anchor": "start",
+    "fontSize": 18,
+    "subtitleFontSize": 12,
+    "subtitleColor": "#666666",
+    "offset": 15
+  },
+  "width": 500,
+  "height": 300,
+  "projection": {
+    "type": "equalEarth"
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
+        "format": {
+          "type": "topojson",
+          "feature": "countries"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#eeeeee",
+        "stroke": "#ffffff",
+        "strokeWidth": 0.5
+      }
+    },
+    {
+      "data": {
+        "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
+        "format": {
+          "type": "topojson",
+          "feature": "countries"
+        }
+      },
+      "transform": [
+        {
+          "lookup": "id",
+          "from": {
+            "data": {
+              "url": "data/chart_06_choropleth.csv"
+            },
+            "key": "Country_ID",
+            "fields": [
+              "Country",
+              "Export_Value_AUD_Million",
+              "Share_Percent"
+            ]
+          }
+        },
+        {
+          "filter": "isValid(datum.Export_Value_AUD_Million)"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#ffffff",
+        "strokeWidth": 0.8
+      },
+      "encoding": {
+        "color": {
+          "field": "Export_Value_AUD_Million",
+          "type": "quantitative",
+          "title": "Export value (AUD million)",
+          "scale": {
+            "scheme": "oranges"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "Country",
+            "type": "nominal",
+            "title": "Export market"
+          },
+          {
+            "field": "Export_Value_AUD_Million",
+            "type": "quantitative",
+            "title": "Export value (AUD million)",
+            "format": ",.0f"
+          },
+          {
+            "field": "Share_Percent",
+            "type": "quantitative",
+            "title": "Share of selected markets",
+            "format": ".2f"
+          }
+        ]
+      }
+    }
+  ],
+  "config": {
+    "background": "#ffffff",
+    "view": {
+      "stroke": null
+    },
+    "font": "'Source Sans 3', Arial, sans-serif",
+    "legend": {
+      "orient": "bottom",
+      "direction": "horizontal",
+      "gradientLength": 260
+    },
+    "title": {
+      "font": "Archivo, Arial, sans-serif",
+      "subtitleFont": "'Source Sans 3', Arial, sans-serif",
+      "color": "#153f34"
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 13,
+      "titleFontWeight": 600
+    }
+  }
+}

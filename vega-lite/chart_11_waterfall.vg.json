@@ -1,0 +1,276 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Waterfall chart showing how each of the top ten commodities contributed to the change in export value between 2023–24 and 2024–25.",
+  "title": {
+    "text": "What Drove the Fall in Export Value?",
+    "subtitle": [
+      "Change in export value of the top ten commodities, 2023–24 to 2024–25",
+      "Bars build up from left to right; the final bar shows the overall result"
+    ],
+    "anchor": "start",
+    "fontSize": 22,
+    "subtitleFontSize": 13,
+    "subtitleColor": "#666666",
+    "offset": 15
+  },
+  "width": 820,
+  "height": 420,
+  "background": "#ffffff",
+  "data": {
+    "url": "data/chart_11_waterfall.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "Step": "number",
+        "Change_AUD_Million": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "calculate": "datum.Change_AUD_Million / 1000",
+      "as": "Change_AUD_Billion"
+    },
+    {
+      "calculate": "datum.Type === 'Net' ? 0 : datum.Change_AUD_Billion",
+      "as": "Step_Amount"
+    },
+    {
+      "window": [
+        {
+          "op": "sum",
+          "field": "Step_Amount",
+          "as": "Running_Total"
+        }
+      ],
+      "sort": [
+        {
+          "field": "Step",
+          "order": "ascending"
+        }
+      ],
+      "frame": [
+        null,
+        0
+      ]
+    },
+    {
+      "calculate": "datum.Type === 'Net' ? 0 : datum.Running_Total - datum.Step_Amount",
+      "as": "Bar_Start"
+    },
+    {
+      "calculate": "datum.Type === 'Net' ? datum.Change_AUD_Billion : datum.Running_Total",
+      "as": "Bar_End"
+    },
+    {
+      "calculate": "(datum.Change_AUD_Billion > 0 ? '+' : '−') + format(abs(datum.Change_AUD_Billion), '.1f')",
+      "as": "Label"
+    },
+    {
+      "calculate": "datum.Change_AUD_Billion > 0 ? max(datum.Bar_Start, datum.Bar_End) : min(datum.Bar_Start, datum.Bar_End)",
+      "as": "Label_Position"
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "Commodity",
+      "type": "nominal",
+      "sort": {
+        "field": "Step",
+        "order": "ascending"
+      },
+      "axis": {
+        "title": null,
+        "labelAngle": -35,
+        "labelAlign": "right",
+        "labelLimit": 250,
+        "labelFontSize": 11
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "rule",
+        "color": "#555555",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": null,
+        "y": {
+          "datum": 0
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "bar",
+        "width": {
+          "band": 0.7
+        },
+        "cornerRadius": 2
+      },
+      "encoding": {
+        "y": {
+          "field": "Bar_Start",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              -30,
+              22
+            ]
+          },
+          "axis": {
+            "title": "Change in export value (AUD billions)",
+            "titleFontSize": 13,
+            "gridColor": "#eeeeee"
+          }
+        },
+        "y2": {
+          "field": "Bar_End"
+        },
+        "color": {
+          "field": "Type",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Increase",
+              "Decrease",
+              "Net"
+            ],
+            "range": [
+              "#1f5a4a",
+              "#d96b27",
+              "#5b5f5d"
+            ]
+          },
+          "legend": {
+            "title": null,
+            "orient": "bottom",
+            "labelExpr": "datum.label === 'Net' ? 'Overall change' : datum.label",
+            "direction": "horizontal"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "Commodity",
+            "type": "nominal",
+            "title": "Commodity"
+          },
+          {
+            "field": "Change_AUD_Billion",
+            "type": "quantitative",
+            "title": "Change (AUD billions)",
+            "format": "+.1f"
+          },
+          {
+            "field": "Bar_End",
+            "type": "quantitative",
+            "title": "Running total change (AUD billions)",
+            "format": "+.1f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "color": "#333333",
+        "baseline": "bottom",
+        "dy": -4
+      },
+      "encoding": {
+        "y": {
+          "field": "Label_Position",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "Label"
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.Change_AUD_Billion > 0"
+        }
+      ]
+    },
+    {
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "color": "#333333",
+        "baseline": "top",
+        "dy": 4
+      },
+      "encoding": {
+        "y": {
+          "field": "Label_Position",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "Label"
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.Change_AUD_Billion <= 0"
+        }
+      ]
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "x": "Aluminium (ingot metal)",
+            "y": -10,
+            "text": "Five resources grew by A$19.7 billion in total…"
+          },
+          {
+            "x": "Metallurgical coal",
+            "y": 21,
+            "text": "…but energy and iron ore fell by A$47.4 billion"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "fontSize": 12,
+        "fontStyle": "italic",
+        "color": "#555555"
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "nominal"
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "text"
+        }
+      }
+    }
+  ],
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "'Source Sans 3', Arial, sans-serif",
+    "title": {
+      "font": "Archivo, Arial, sans-serif",
+      "subtitleFont": "'Source Sans 3', Arial, sans-serif",
+      "color": "#153f34"
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 13,
+      "titleFontWeight": 600
+    }
+  }
+}

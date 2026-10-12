@@ -1,0 +1,217 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Ranking changes among Australia's five major export commodities.",
+  "width": 800,
+  "height": 400,
+  "background": "#ffffff",
+  "data": {
+    "url": "data/chart_02_export_mix.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "Export_Value_AUD_Million": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "filter": "datum.Category !== 'Other resources and energy'"
+    },
+    {
+      "window": [
+        {
+          "op": "rank",
+          "as": "Rank"
+        }
+      ],
+      "sort": [
+        {
+          "field": "Export_Value_AUD_Million",
+          "order": "descending"
+        }
+      ],
+      "groupby": [
+        "Financial_Year"
+      ]
+    },
+    {
+      "calculate": "datum.Export_Value_AUD_Million / 1000",
+      "as": "Export_Value_AUD_Billion"
+    }
+  ],
+  "title": {
+    "text": "Which Export Commodities Changed Rank?",
+    "subtitle": "Annual ranking of five major commodities by export value, 2004–05 to 2024–25",
+    "anchor": "start",
+    "fontSize": 22,
+    "subtitleFontSize": 13,
+    "subtitleColor": "#666666"
+  },
+  "encoding": {
+    "x": {
+      "field": "Financial_Year",
+      "type": "ordinal",
+      "sort": "ascending",
+      "axis": {
+        "title": "Financial year",
+        "labelAngle": -45,
+        "labelFontSize": 10,
+        "titleFontSize": 13
+      }
+    },
+    "y": {
+      "field": "Rank",
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          0.4,
+          5.3
+        ],
+        "reverse": true
+      },
+      "axis": {
+        "title": "Export rank",
+        "values": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "labelExpr": "'Rank ' + datum.value",
+        "labelFontSize": 11,
+        "titleFontSize": 13,
+        "grid": true,
+        "gridColor": "#e6e6e6"
+      }
+    },
+    "color": {
+      "field": "Category",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "Iron ore",
+          "LNG",
+          "Gold",
+          "Metallurgical coal",
+          "Thermal coal"
+        ],
+        "range": [
+          "#9f3b2c",
+          "#d88932",
+          "#e3b341",
+          "#9b6847",
+          "#6f4e37"
+        ]
+      },
+      "legend": {
+        "title": "Export commodity",
+        "orient": "bottom",
+        "columns": 3,
+        "labelFontSize": 11,
+        "titleFontSize": 12
+      }
+    },
+    "detail": {
+      "field": "Category"
+    },
+    "tooltip": [
+      {
+        "field": "Financial_Year",
+        "type": "nominal",
+        "title": "Financial year"
+      },
+      {
+        "field": "Category",
+        "type": "nominal",
+        "title": "Commodity"
+      },
+      {
+        "field": "Rank",
+        "type": "quantitative",
+        "title": "Rank",
+        "format": ".0f"
+      },
+      {
+        "field": "Export_Value_AUD_Billion",
+        "type": "quantitative",
+        "title": "Export value (AUD billions)",
+        "format": ".1f"
+      }
+    ]
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 3
+      }
+    },
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 75,
+        "stroke": "#ffffff",
+        "strokeWidth": 1
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "Financial_Year": "2013–14",
+            "Rank": 0.6,
+            "text": "Iron ore has ranked #1 every year since 2009–10"
+          },
+          {
+            "Financial_Year": "2021–22",
+            "Rank": 1.5,
+            "text": "LNG has held #2 since 2018–19"
+          }
+        ]
+      },
+      "mark": {
+        "fontSize": 12,
+        "fontStyle": "italic",
+        "color": "#555555",
+        "type": "text",
+        "align": "center"
+      },
+      "encoding": {
+        "x": {
+          "field": "Financial_Year",
+          "type": "ordinal"
+        },
+        "y": {
+          "field": "Rank",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "text"
+        },
+        "color": {
+          "value": "#555555"
+        },
+        "detail": null,
+        "tooltip": null
+      }
+    }
+  ],
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "'Source Sans 3', Arial, sans-serif",
+    "title": {
+      "font": "Archivo, Arial, sans-serif",
+      "subtitleFont": "'Source Sans 3', Arial, sans-serif",
+      "color": "#153f34"
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 13,
+      "titleFontWeight": 600
+    }
+  }
+}

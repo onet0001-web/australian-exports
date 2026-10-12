@@ -1,0 +1,142 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Waffle chart: each square is 1% of the combined export value of five major commodities across Australia's leading markets in 2023.",
+  "title": {
+    "text": "Half of It Goes to One Country",
+    "subtitle": [
+      "Share of combined export value of five major commodities, 2023",
+      "Each square represents 1%"
+    ],
+    "anchor": "start",
+    "fontSize": 22,
+    "subtitleFontSize": 13,
+    "subtitleColor": "#666666",
+    "offset": 15
+  },
+  "background": "#ffffff",
+  "data": {
+    "url": "data/chart_12_waffle.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "Square": "number",
+        "Share_Percent": "number",
+        "Squares_For_Market": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "calculate": "datum.Square % 10",
+      "as": "Column"
+    },
+    {
+      "calculate": "floor(datum.Square / 10)",
+      "as": "Row"
+    }
+  ],
+  "params": [
+    {
+      "name": "marketPick",
+      "select": {
+        "type": "point",
+        "fields": [
+          "Market"
+        ]
+      },
+      "bind": "legend"
+    }
+  ],
+  "width": {
+    "step": 30
+  },
+  "height": {
+    "step": 30
+  },
+  "mark": {
+    "type": "rect",
+    "cornerRadius": 4,
+    "stroke": "#ffffff",
+    "strokeWidth": 3
+  },
+  "encoding": {
+    "x": {
+      "field": "Column",
+      "type": "ordinal",
+      "axis": null
+    },
+    "y": {
+      "field": "Row",
+      "type": "ordinal",
+      "axis": null
+    },
+    "color": {
+      "field": "Market",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "China",
+          "Japan",
+          "South Korea",
+          "Taiwan",
+          "India",
+          "Other markets"
+        ],
+        "range": [
+          "#9f3b2c",
+          "#d96b27",
+          "#e3a33c",
+          "#1f5a4a",
+          "#5f8f7f",
+          "#c8c1b5"
+        ]
+      },
+      "legend": {
+        "title": "Export market",
+        "orient": "right",
+        "labelFontSize": 13,
+        "titleFontSize": 13,
+        "symbolType": "square",
+        "symbolSize": 220,
+        "rowPadding": 8,
+        "labelExpr": "datum.label + '  ' + {'China': '49.9%', 'Japan': '23.2%', 'South Korea': '9.7%', 'Taiwan': '6.7%', 'India': '5.9%', 'Other markets': '4.6%'}[datum.label]"
+      }
+    },
+    "opacity": {
+      "condition": {
+        "param": "marketPick",
+        "value": 1
+      },
+      "value": 0.25
+    },
+    "tooltip": [
+      {
+        "field": "Market",
+        "type": "nominal",
+        "title": "Export market"
+      },
+      {
+        "field": "Share_Percent",
+        "type": "quantitative",
+        "title": "Share of combined value (%)",
+        "format": ".1f"
+      }
+    ]
+  },
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "'Source Sans 3', Arial, sans-serif",
+    "title": {
+      "font": "Archivo, Arial, sans-serif",
+      "subtitleFont": "'Source Sans 3', Arial, sans-serif",
+      "color": "#153f34"
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 13,
+      "titleFontWeight": 600
+    }
+  }
+}

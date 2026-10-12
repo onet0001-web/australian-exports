@@ -1,0 +1,150 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Top 10 Australian export commodities by value in 2024–25.",
+  "width": 750,
+  "height": 420,
+  "background": "#ffffff",
+  "data": {
+    "url": "data/commodity_ranking.csv"
+  },
+  "transform": [
+    {
+      "calculate": "datum.Export_Value_AUD_Million / 1000",
+      "as": "Export_Value_AUD_Billion"
+    }
+  ],
+  "title": {
+    "text": "Australia’s Most Valuable Export Commodities",
+    "subtitle": "Top 10 commodities by export value, 2024–25",
+    "anchor": "start",
+    "fontSize": 22,
+    "subtitleFontSize": 13,
+    "subtitleColor": "#666666"
+  },
+  "encoding": {
+    "y": {
+      "field": "Commodity",
+      "type": "nominal",
+      "sort": {
+        "field": "Export_Value_AUD_Billion",
+        "order": "descending"
+      },
+      "axis": {
+        "title": null,
+        "labelFontSize": 12,
+        "labelLimit": 220
+      }
+    },
+    "x": {
+      "field": "Export_Value_AUD_Billion",
+      "type": "quantitative",
+      "axis": {
+        "title": "Export value (AUD billions)",
+        "titleFontSize": 13,
+        "labelFontSize": 11,
+        "grid": true,
+        "gridColor": "#e6e6e6"
+      },
+      "scale": {
+        "zero": true
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "rule",
+        "strokeWidth": 3,
+        "color": "#d88932"
+      }
+    },
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 150,
+        "color": "#9f3b2c"
+      },
+      "encoding": {
+        "tooltip": [
+          {
+            "field": "Commodity",
+            "type": "nominal",
+            "title": "Commodity"
+          },
+          {
+            "field": "Financial_Year",
+            "type": "nominal",
+            "title": "Financial year"
+          },
+          {
+            "field": "Export_Value_AUD_Billion",
+            "type": "quantitative",
+            "title": "Export value (AUD billions)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 9,
+        "fontSize": 11,
+        "color": "#333333"
+      },
+      "encoding": {
+        "text": {
+          "field": "Export_Value_AUD_Billion",
+          "type": "quantitative",
+          "format": ".1f"
+        }
+      }
+    },
+    {
+      "mark": {
+        "fontSize": 12,
+        "fontStyle": "italic",
+        "color": "#555555",
+        "type": "text",
+        "align": "left",
+        "lineHeight": 16
+      },
+      "encoding": {
+        "x": {
+          "datum": 45
+        },
+        "text": {
+          "field": "Note"
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.Commodity === 'Crude oil'"
+        },
+        {
+          "calculate": "['Iron ore alone made up about one-third (34%)', 'of the value of the top ten exports']",
+          "as": "Note"
+        }
+      ]
+    }
+  ],
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "'Source Sans 3', Arial, sans-serif",
+    "title": {
+      "font": "Archivo, Arial, sans-serif",
+      "subtitleFont": "'Source Sans 3', Arial, sans-serif",
+      "color": "#153f34"
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 13,
+      "titleFontWeight": 600
+    }
+  }
+}

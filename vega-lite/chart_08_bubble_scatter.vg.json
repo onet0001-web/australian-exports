@@ -1,0 +1,256 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Which Major Exports Are Growing or Declining?",
+    "subtitle": "Top 10 commodities: export value in 2024–25 and change from 2023–24",
+    "anchor": "start",
+    "fontSize": 22,
+    "subtitleFontSize": 13,
+    "subtitleColor": "#666666",
+    "offset": 15
+  },
+  "data": {
+    "url": "data/chart_08_bubble_scatter.csv"
+  },
+  "width": 820,
+  "height": 450,
+  "transform": [
+    {
+      "calculate": "datum.Export_Value_2024_25_AUD_Million / 1000",
+      "as": "Export_Value_AUD_Billion"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "rule",
+        "color": "#888888",
+        "strokeDash": [
+          4,
+          4
+        ]
+      },
+      "data": {
+        "values": [
+          {
+            "y": 0
+          }
+        ]
+      },
+      "encoding": {
+        "y": {
+          "field": "y",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "params": [
+        {
+          "name": "hover",
+          "select": {
+            "type": "point",
+            "fields": [
+              "Commodity"
+            ],
+            "on": "pointerover",
+            "clear": "pointerout"
+          }
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "size": 320,
+        "stroke": "white",
+        "strokeWidth": 1.5
+      },
+      "encoding": {
+        "x": {
+          "field": "Export_Value_AUD_Billion",
+          "type": "quantitative",
+          "title": "Export value, 2024–25 (AUD billions)",
+          "scale": {
+            "domain": [
+              0,
+              125
+            ]
+          },
+          "axis": {
+            "gridColor": "#eeeeee"
+          }
+        },
+        "y": {
+          "field": "Growth_Percent",
+          "type": "quantitative",
+          "title": "Change from 2023–24 (%)",
+          "scale": {
+            "domain": [
+              -35,
+              50
+            ]
+          },
+          "axis": {
+            "gridColor": "#eeeeee"
+          }
+        },
+        "color": {
+          "field": "Sector",
+          "type": "nominal",
+          "title": "Commodity group",
+          "scale": {
+            "domain": [
+              "Energy",
+              "Resources"
+            ],
+            "range": [
+              "#d96b27",
+              "#1f5a4a"
+            ]
+          },
+          "legend": {
+            "orient": "top-right"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "Commodity",
+            "type": "nominal",
+            "title": "Commodity"
+          },
+          {
+            "field": "Export_Value_AUD_Billion",
+            "type": "quantitative",
+            "title": "Export value 2024–25 (AUD billions)",
+            "format": ".1f"
+          },
+          {
+            "field": "Growth_Percent",
+            "type": "quantitative",
+            "title": "Change from 2023–24 (%)",
+            "format": "+.1f"
+          },
+          {
+            "field": "Share_Top10_Percent",
+            "type": "quantitative",
+            "title": "Share of top ten (%)",
+            "format": ".1f"
+          }
+        ],
+        "opacity": {
+          "condition": {
+            "param": "hover",
+            "value": 0.95
+          },
+          "value": 0.6
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 12,
+        "fontSize": 11,
+        "color": "#333333"
+      },
+      "transform": [
+        {
+          "filter": "datum.Export_Value_AUD_Billion > 9"
+        }
+      ],
+      "encoding": {
+        "x": {
+          "field": "Export_Value_AUD_Billion",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "Growth_Percent",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "Commodity"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 10,
+        "fontSize": 10,
+        "color": "#555555"
+      },
+      "transform": [
+        {
+          "filter": "datum.Export_Value_AUD_Billion <= 9"
+        }
+      ],
+      "encoding": {
+        "x": {
+          "field": "Export_Value_AUD_Billion",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "Growth_Percent",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "Commodity"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "x": 72,
+            "y": 47,
+            "text": "▲ GREW IN 2024–25"
+          },
+          {
+            "x": 72,
+            "y": -36,
+            "text": "▼ FELL IN 2024–25"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "fontSize": 12,
+        "fontWeight": "bold",
+        "color": "#8a8f8c"
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "text"
+        }
+      }
+    }
+  ],
+  "config": {
+    "background": "#ffffff",
+    "font": "'Source Sans 3', Arial, sans-serif",
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 13,
+      "titleFontWeight": 600
+    },
+    "title": {
+      "font": "Archivo, Arial, sans-serif",
+      "subtitleFont": "'Source Sans 3', Arial, sans-serif",
+      "color": "#153f34"
+    }
+  }
+}

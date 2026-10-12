@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="An interactive data visualisation exploring Australia's major export commodities, long-term trade patterns and international markets."
+  >
+
+  <meta name="author" content="Oneth Sasviru Kumarasiri">
+
+  <title>Australian Exports</title>
+
+  <!-- Web fonts: Archivo (headings) and Source Sans 3 (body and charts) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+  >
+
+  <link rel="stylesheet" href="css/styles.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navigation">
+    <div class="navigation-inner">
+
+      <a class="brand" href="#top">
+        Australian Exports
+      </a>
+
+      <div class="navigation-links">
+        <a href="#overview">Overview</a>
+        <a href="#change">Change</a>
+        <a href="#markets">Markets</a>
+        <a href="#connections">Connections</a>
+        <a href="#conclusion">Conclusion</a>
+      </div>
+
+    </div>
+  </nav>
+
+  <main id="top">
+
+    <!-- Main introduction -->
+    <header class="hero">
+
+      <div class="hero-content">
+
+        <p class="eyebrow">
+          Australia’s trade story
+        </p>
+
+        <h1>
+          Australian Exports
+        </h1>
+
+        <p class="hero-subtitle">
+          How commodities, changing values and international markets shape
+          Australia’s export economy.
+        </p>
+
+        <p class="hero-description">
+          Australia is one of the world’s major exporters of minerals and
+          energy commodities. This visualisation explores which commodities
+          generate the greatest export value, how their importance has changed
+          and which countries form Australia’s most significant markets.
+        </p>
+
+        <a class="explore-button" href="#overview">
+          Explore the data
+        </a>
+
+      </div>
+
+      <div class="hero-stat">
+
+        <span class="stat-label">
+          Leading export in 2024–25
+        </span>
+
+        <strong>
+          Iron ore
+        </strong>
+
+        <span class="stat-value">
+          A$116.3 billion
+        </span>
+
+      </div>
+
+    </header>
+
+    
+    <!-- SECTION 1: EXPORT OVERVIEW -->
+    
+
+    <section id="overview" class="story-section">
+
+      <div class="section-heading">
+
+        <p class="section-number">01</p>
+
+        <div>
+          <h2>Australia’s export leaders</h2>
+
+          <p>
+            A small group of minerals and energy products contributes a large
+            proportion of Australia’s export value.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Chart 1 -->
+      <article class="chart-card">
+
+        <div class="chart-container">
+          <div id="chart-01"></div>
+        </div>
+
+        <div class="chart-commentary">
+
+          <p class="insight-label">Key finding</p>
+
+          <p class="chart-insight">
+            Iron ore was Australia’s most valuable export commodity in
+            2024–25, reaching approximately A$116.3 billion. Its export value
+            was substantially higher than LNG, gold and coal.
+          </p>
+
+          <p class="chart-source">
+            Source: Department of Industry, Science and Resources,
+            Resources and Energy Quarterly.
+          </p>
+
+        </div>
+
+      </article>
+
+    </section>
+
+    
+    <!-- SECTION 2: CHANGE OVER TIME -->
+    
+
+    <section id="change" class="story-section section-tinted">
+
+      <div class="section-heading">
+
+        <p class="section-number">02</p>
+
+        <div>
+          <h2>Two decades of change</h2>
+
+          <p>
+            Export values have expanded substantially, but commodities have
+            not grown at the same rate or maintained the same rankings.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Chart 2 -->
+      <article class="chart-card">
+
+        <div class="chart-container">
+          <div id="chart-02"></div>
+        </div>
+
+        <div class="chart-commentary">
+
+          <p class="insight-label">Key finding</p>
+
+          <p class="chart-insight">
+            Australia’s resources and energy exports increased considerably
+            over the past two decades. Iron ore became the largest contributor,
+            while LNG and coal contributed to the more recent export-value peak.
+          </p>
+
+          <p class="interaction-hint">
+            Click a category in the legend or on the chart to highlight it;
+            double-click to reset.
+          </p>
+
+          <p class="chart-source">
+            Source: Department of Industry, Science and Resources,
+            Resources and Energy Quarterly.
+          </p>
+
+        </div>
+
+      </article>
+
+      <!-- Chart 3 -->
+      <article class="chart-card">
+
+        <div class="chart-container">
+          <div id="chart-03"></div>
+        </div>
+
+        <div class="chart-commentary">
+
+          <p class="insight-label">Key finding</p>
+
+          <p class="chart-insight">
+            Iron ore moved from second place in 2004–05 to become Australia’s
+            leading export commodity. LNG climbed from fifth to second place,
+            while both coal categories moved down the ranking by 2024–25.
+          </p>
+
+          <p class="chart-source">
+            Source: Department of Industry, Science and Resources,
+            Resources and Energy Quarterly.
+          </p>
+
+        </div>
+
+      </article>
+
+      <!-- Chart 8 -->
+      <article class="chart-card">
+
+        <div class="chart-container">
+          <div id="chart-08"></div>
+        </div>
+
+        <div class="chart-commentary">
+
+          <p class="insight-label">Key finding</p>
+
+          <p class="chart-insight">
+            Gold and alumina recorded the strongest growth between 2023–24
+            and 2024–25. Iron ore remained the largest export despite declining
+            by approximately 15.6%, while metallurgical coal experienced the
+            largest decline among the ten selected commodities.
+          </p>
+
+          <p class="chart-source">
+            Source: Department of Industry, Science and Resources,
+            Resources and Energy Quarterly.
+          </p>
+
+        </div>
+
+      </article>
+
+      <!-- Chart 11 -->
+      <article class="chart-card">
+
+        <div class="chart-container">
+          <div id="chart-11"></div>
+        </div>
+
+        <div class="chart-commentary">
+
+          <p class="insight-label">Key finding</p>
+
+          <p class="chart-insight">
+            The combined value of the top ten exports fell by about
+            A$27.7 billion in 2024–25. Gold, alumina, aluminium and copper
+            added A$19.7 billion, but this was outweighed by falls in iron ore,
+            metallurgical coal, thermal coal, LNG and crude oil, which together
+            lost A$47.4 billion.
+          </p>
+
+          <p class="chart-source">
+            Source: Department of Industry, Science and Resources,
+            Resources and Energy Quarterly.
+          </p>
+
+        </div>
+
+      </article>
+
+      <!-- Chart 9 -->
+      <article class="chart-card">
+
+        <div class="chart-container">
+          <div id="chart-09"></div>
+        </div>
+
+        <div class="chart-commentary">
+
+          <p class="insight-label">Key finding</p>
+
+          <p class="chart-insight">
+            Iron ore experienced the largest long-term increase among the five
+            commodities. LNG also expanded substantially, while coal values
+            reached exceptionally high levels before declining. Gold rose
+            strongly in 2024–25.
+          </p>
+
+          <p class="chart-source">
+            Source: Department of Industry, Science and Resources,
+            Resources and Energy Quarterly.
+          </p>
+
+        </div>
+
+      </article>
+
+    </section>
+
+    
+    <!-- SECTION 3: INTERNATIONAL MARKETS -->
+    
+
+    <section id="markets" class="story-section">
+
+      <div class="section-heading">
+
+        <p class="section-number">03</p>
+
+        <div>
+          <h2>Australia’s major export markets</h2>
+
+          <p>
+            Asian markets dominate the trade network, with China, Japan and
+            South Korea receiving the greatest combined export value.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Chart 4 -->
+      <article class="chart-card">
+
+        <div class="chart-container">
+          <div id="chart-04"></div>
+        </div>
+
+        <div class="chart-commentary">
+
+          <p class="insight-label">Key finding</p>
+
+          <p class="chart-insight">
+            China was the largest destination for Australia’s five selected
+            export commodities in 2023, followed by Japan and South Korea.
+          </p>
+
+          <p class="chart-source">
+            Source: Department of Industry, Science and Resources, based on
+            ABS and International Trade Centre data.
+          </p>
+
+        </div>
+
+      </article>
+
+      <!-- Two-column map layout -->
+      <div class="chart-grid">
+
+        <!-- Chart 5 -->
+        <article class="chart-card compact-card">
+
+          <div class="chart-container">
+            <div id="chart-05"></div>
+          </div>
+
+          <div class="chart-commentary">
+
+            <p class="insight-label">Market size</p>
+
+            <p class="chart-insight">
+              China was the largest market in 2023. Japan was the
+              second-largest market, followed by South Korea.
+            </p>
+
+            <p class="chart-source">
+              Source: Department of Industry, Science and Resources.
+            </p>
+
+          </div>
+
+        </article>
+
+        <!-- Chart 6 -->
+        <article class="chart-card compact-card">
+
+          <div class="chart-container">
+            <div id="chart-06"></div>
+          </div>
+
+          <div class="chart-commentary">
+
+            <p class="insight-label">Market concentration</p>
+
+            <p class="chart-insight">
+              The darkest shading sits over China, with Japan, India and the
+              United States far lighter. Hong Kong, Taiwan and Singapore are too
+              small to see clearly at world scale; use the circle map or the
+              chart below to compare them.
+            </p>
+
+            <p class="chart-source">
+              Source: Department of Industry, Science and Resources.
+            </p>
+
+          </div>
+
+        </article>
+
+      </div>
+
+      <!-- Chart 12 -->
+      <article class="chart-card split-card">
+
+        <div class="chart-container">
+          <div id="chart-12"></div>
+        </div>
+
+        <div class="chart-commentary">
+
+          <p class="insight-label">Market concentration</p>
+
+          <p class="chart-insight">
+            China received about half (49.9%) of the combined value of
+            Australia's five major commodity exports across these markets in
+            2023. Together, China, Japan and South Korea accounted for more
+            than four in every five dollars.
+          </p>
+
+          <p class="interaction-hint">
+            Click a square or a market in the legend to highlight it.
+          </p>
+
+          <p class="chart-source">
+            Source: Department of Industry, Science and Resources, based on
+            ABS and International Trade Centre data. Shares are rounded to
+            whole squares.
+          </p>
+
+        </div>
+
+      </article>
+
+    </section>
+
+    
+    <!-- SECTION 4: COMMODITY–MARKET CONNECTIONS -->
+    
+
+    <section id="connections" class="story-section section-tinted">
+
+      <div class="section-heading">
+
+        <p class="section-number">04</p>
+
+        <div>
+          <h2>Different commodities, different markets</h2>
+
+          <p>
+            Australia’s major commodities do not share the same international
+            customer base. Some are highly concentrated, while others are more
+            geographically distributed.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Chart 7 -->
+      <article class="chart-card">
+
+        <div class="chart-container">
+          <div id="chart-07"></div>
+        </div>
+
+        <div class="chart-commentary">
+
+          <p class="insight-label">Key finding</p>
+
+          <p class="chart-insight">
+            China dominates iron ore exports, while Japan is the leading
+            market for LNG and thermal coal. India is particularly important
+            for metallurgical coal, while gold has a more geographically
+            varied market structure.
+          </p>
+
+          <p class="chart-note">
+            Blank heatmap cells mean that the country was not reported among
+            the five leading markets for that commodity; they do not
+            necessarily represent zero exports.
+          </p>
+
+          <p class="chart-source">
+            Source: Department of Industry, Science and Resources, based on
+            ABS and International Trade Centre data.
+          </p>
+
+        </div>
+
+      </article>
+
+      <!-- Chart 10 -->
+      <article class="chart-card">
+
+        <div class="chart-container">
+          <div id="chart-10"></div>
+        </div>
+
+        <div class="chart-commentary">
+
+          <p class="insight-label">Key finding</p>
+
+          <p class="chart-insight">
+            Iron ore exports are strongly concentrated in China, while LNG and
+            coal are distributed across several major Asian markets. Gold has
+            a more geographically varied group of leading destinations.
+          </p>
+
+          <p class="interaction-hint">
+            Click a link or a commodity in the legend to follow its flows;
+            double-click to reset.
+          </p>
+
+          <p class="chart-source">
+            Source: Department of Industry, Science and Resources, based on
+            ABS and International Trade Centre data.
+          </p>
+
+        </div>
+
+      </article>
+
+    </section>
+
+    
+    <!-- CONCLUSION -->
+    
+
+    <section id="conclusion" class="conclusion">
+
+      <p class="eyebrow">Conclusion</p>
+
+      <h2>
+        Australia’s export strength is substantial, but concentrated.
+      </h2>
+
+      <p>
+        Australia’s export economy is strongly supported by minerals and
+        energy products. Iron ore remains the clear leader, while LNG and gold
+        have become increasingly important. However, the data also reveal a
+        high dependence on a limited number of Asian markets—particularly
+        China, Japan and South Korea.
+      </p>
+
+      <p>
+        This concentration creates significant export opportunities but also
+        exposes Australia to changes in commodity prices, demand and regional
+        economic conditions. Continued market diversification may help create
+        a more resilient export economy.
+      </p>
+
+    </section>
+
+    
+    <!-- NOTES AND AUTHOR -->
+    
+
+    <footer class="page-footer">
+
+      <div class="footer-column">
+
+        <h2>Sources and notes</h2>
+
+        <p>
+          Department of Industry, Science and Resources,
+          <em>Resources and Energy Quarterly</em>:
+          <a href="https://www.industry.gov.au/publications/resources-and-energy-quarterly">industry.gov.au/publications/resources-and-energy-quarterly</a>
+        </p>
+
+        <p>
+          Australian Bureau of Statistics,
+          <em>International Trade in Goods and Services, Australia</em>:
+          <a href="https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods-and-services-australia">abs.gov.au</a>
+        </p>
+
+        <p>
+          International Trade Centre, <em>Trade Map</em>:
+          <a href="https://www.trademap.org/">trademap.org</a>
+        </p>
+
+        <p>
+          World map boundaries: Natural Earth via
+          <a href="https://github.com/topojson/world-atlas">world-atlas (TopoJSON)</a>.
+        </p>
+
+        <p class="method-note">
+          Values are in Australian dollars and are not adjusted for inflation.
+          Commodity values are by financial year (July–June). The
+          commodity–market analysis uses the five leading markets reported for
+          each of five selected commodities in calendar year 2023, the most
+          recent year available with this market breakdown.
+        </p>
+
+        <h3>Use of AI</h3>
+
+        <p>
+          Generative AI (Claude, Anthropic) was used to review the code, fix errors,
+          correct grammar and improve the layout. The visualisation and its code were
+          developed by the author.
+        </p>
+
+      </div>
+
+      <div class="footer-column author-details">
+
+        <h2>Author</h2>
+
+        <p>
+          <strong>Oneth Sasviru Kumarasiri</strong>
+        </p>
+
+        <p>
+          FIT3179 Data Visualisation 2
+        </p>
+
+        <p>
+          Monash University
+        </p>
+
+        <p>
+          Published October 2026
+        </p>
+
+        <p>
+          Charts built with
+          <a href="https://vega.github.io/vega-lite/">Vega-Lite</a>.
+        </p>
+
+      </div>
+
+    </footer>
+
+  </main>
+
+  <!-- Loads and embeds all Vega-Lite charts -->
+  <script src="js/vega_lite_vis.js"></script>
+
+</body>
+
+</html>
