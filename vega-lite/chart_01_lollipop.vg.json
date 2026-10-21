@@ -55,7 +55,7 @@
       "mark": {
         "type": "rule",
         "strokeWidth": 3,
-        "color": "#d88932"
+        "color": "#c0562a"
       }
     },
     {
@@ -63,7 +63,8 @@
         "type": "point",
         "filled": true,
         "size": 150,
-        "color": "#9f3b2c"
+        "color": "#c0562a",
+        "opacity": 1
       },
       "encoding": {
         "tooltip": [

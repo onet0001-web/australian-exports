@@ -4,7 +4,8 @@
     "text": "Which Markets Matter Most for Each Commodity?",
     "subtitle": [
       "Leading destinations for five major Australian exports, 2023 (AUD billions)",
-      "Darker cells represent higher export values; blank cells were not among a commodity's top five markets"
+      "Darker cells mean higher export values. Each step on the colour scale is ten times larger.",
+      "Blank cells were not among a commodity's top five markets"
     ],
     "anchor": "start",
     "fontSize": 22,
@@ -114,7 +115,13 @@
             "orient": "bottom",
             "direction": "horizontal",
             "gradientLength": 300,
-            "labelExpr": "format(datum.value / 1000, ',.0f') + 'b'"
+            "labelExpr": "'A$' + format(datum.value / 1000, ',.0f') + 'b'",
+            "values": [
+              1000,
+              10000,
+              100000
+            ],
+            "labelFontSize": 11
           }
         },
         "opacity": {

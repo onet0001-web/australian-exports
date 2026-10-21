@@ -1,10 +1,11 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Choropleth of Australia's top 15 export markets for all goods and services, shaded by each market's share of total exports in calendar year 2025 (DFAT).",
   "title": {
-    "text": "Which Countries Are Australia’s Largest Export Markets?",
+    "text": "Beyond Resources: Where All Our Exports Go",
     "subtitle": [
-      "Combined value of five major Australian export commodities, 2023",
-      "Darker orange represents a larger export value"
+      "Share of Australia's total goods and services exports, 2025 (top 15 markets)",
+      "Singapore (3.0%) and Hong Kong (2.5%) are too small to show at this scale"
     ],
     "anchor": "start",
     "fontSize": 18,
@@ -46,18 +47,34 @@
           "lookup": "id",
           "from": {
             "data": {
-              "url": "data/chart_06_choropleth.csv"
+              "url": "data/chart_06_dfat_export_share.csv",
+              "format": {
+                "type": "csv",
+                "parse": {
+                  "Country_ID": "string",
+                  "Exports_2025_AUD_Million": "number",
+                  "Share_2025_Percent": "number",
+                  "Growth_Percent": "number",
+                  "Rank": "number"
+                }
+              }
             },
             "key": "Country_ID",
             "fields": [
               "Country",
-              "Export_Value_AUD_Million",
-              "Share_Percent"
+              "Rank",
+              "Exports_2025_AUD_Million",
+              "Share_2025_Percent",
+              "Growth_Percent"
             ]
           }
         },
         {
-          "filter": "isValid(datum.Export_Value_AUD_Million)"
+          "filter": "isValid(datum.Share_2025_Percent)"
+        },
+        {
+          "calculate": "datum.Exports_2025_AUD_Million / 1000",
+          "as": "Exports_AUD_Billion"
         }
       ],
       "mark": {
@@ -67,11 +84,29 @@
       },
       "encoding": {
         "color": {
-          "field": "Export_Value_AUD_Million",
+          "field": "Share_2025_Percent",
           "type": "quantitative",
-          "title": "Export value (AUD million)",
+          "title": "Share of total exports",
           "scale": {
-            "scheme": "oranges"
+            "type": "threshold",
+            "domain": [
+              2,
+              4,
+              8,
+              15
+            ],
+            "range": [
+              "#fde0c5",
+              "#f9b98a",
+              "#f08a4b",
+              "#d4592a",
+              "#8f2d14"
+            ]
+          },
+          "legend": {
+            "orient": "bottom",
+            "direction": "horizontal",
+            "labelExpr": "(datum.label == null || datum.label == 'null' || datum.label == '') ? '' : datum.label + '%'"
           }
         },
         "tooltip": [
@@ -81,18 +116,64 @@
             "title": "Export market"
           },
           {
-            "field": "Export_Value_AUD_Million",
-            "type": "quantitative",
-            "title": "Export value (AUD million)",
-            "format": ",.0f"
+            "field": "Rank",
+            "type": "ordinal",
+            "title": "Rank (2025)"
           },
           {
-            "field": "Share_Percent",
+            "field": "Share_2025_Percent",
             "type": "quantitative",
-            "title": "Share of selected markets",
-            "format": ".2f"
+            "title": "Share of total exports (%)",
+            "format": ".1f"
+          },
+          {
+            "field": "Exports_AUD_Billion",
+            "type": "quantitative",
+            "title": "Exports (AUD billions)",
+            "format": ".1f"
+          },
+          {
+            "field": "Growth_Percent",
+            "type": "quantitative",
+            "title": "Change from 2024 (%)",
+            "format": "+.1f"
           }
         ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "Longitude": 100,
+            "Latitude": 60,
+            "text": "China 29.4%"
+          },
+          {
+            "Longitude": -92,
+            "Latitude": 57,
+            "text": "US 9.0% (up 46%)"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "color": "#333333"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "Longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "Latitude",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "text"
+        }
       }
     }
   ],
@@ -102,20 +183,13 @@
       "stroke": null
     },
     "font": "'Source Sans 3', Arial, sans-serif",
-    "legend": {
-      "orient": "bottom",
-      "direction": "horizontal",
-      "gradientLength": 260
-    },
     "title": {
       "font": "Archivo, Arial, sans-serif",
       "subtitleFont": "'Source Sans 3', Arial, sans-serif",
       "color": "#153f34"
     },
-    "axis": {
-      "labelFontSize": 11,
-      "titleFontSize": 13,
-      "titleFontWeight": 600
+    "legend": {
+      "gradientLength": 260
     }
   }
 }
